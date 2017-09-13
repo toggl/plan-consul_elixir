@@ -5,9 +5,11 @@ defmodule Consul do
 
   require Logger
 
-  def connect_nodes(service_name) do
-    for host <- Consul.Service.addresses(service_name),
-      do: :"#{node_name()}@#{host}" |> Node.connect()
+  def connect_nodes(service) do
+    with {:ok, addresses} <- Consul.Service.addresses(service) do
+      for host <- addresses,
+        do: :"#{node_name()}@#{host}" |> Node.connect()
+    end
   end
 
   def base_url(path) do
