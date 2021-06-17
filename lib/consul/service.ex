@@ -6,8 +6,8 @@ defmodule Consul.Service do
     payload = %{Name: name, Port: port, Check: check}
     json_payload = Poison.encode!(payload)
     Logger.info("Registering consul service with parameters: #{json_payload}")
-    HTTPoison.get(Consul.base_url("/agent/service/deregister/#{name}"))
-    HTTPoison.post(Consul.base_url("/agent/service/register"), json_payload)
+    {:ok, %HTTPoison.Response{status_code: 200}} = HTTPoison.put(Consul.base_url("/agent/service/deregister/#{name}"))
+    {:ok, %HTTPoison.Response{status_code: 200}} = HTTPoison.put(Consul.base_url("/agent/service/register"), json_payload)
   end
 
   def addresses(name) do
