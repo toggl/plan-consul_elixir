@@ -13,7 +13,9 @@ defmodule Consul do
   end
 
   def base_url(path) do
-    "http://localhost:8500/v1#{path}"
+    host = System.get_env("CONSUL_HOST") || "localhost"
+    port = System.get_env("CONSUL_PORT") || "8500"
+    "http://#{host}:#{port}/v1#{path}"
   end
 
   @doc """
